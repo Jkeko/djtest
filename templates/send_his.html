@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<br lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wayne-自动化</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+<form action="/send/" method="post" >
+
+    <table class="table">
+        <tr class="success">
+            <td>
+            <label class="strong">输入手机号</label>
+                <input type="text" style="width:200px;color:#ff0000"  name="phone" placeholder="输入手机号,用于创建订单"  value="18310220886" required/>
+            </td>
+            <td>
+                <label class="strong">输入用户Token：</label>
+                <input type="text" style="width:200px;color:#ff0000"  name="token" placeholder="输入用户token，18310220886默认为：wangshuguang"   value="wangshuguang" required />
+            </td>
+        </tr>
+
+
+        <tr class="success">
+            <td>
+                <label class="strong">选择资方类型</label>
+                    <select name="bank"  style="width:100px;" placeholder="选择资方">
+                        <option value="icbc" >工行</option>
+                        <option value="ccb">建行</option>
+                        <option value="minsheng">民生</option>
+                        <option value="huizu">回租-长安新生</option>
+                    </select>
+            </td>
+            <td>
+                <label class="strong">执行节点选择</label>
+                <select name="b_end"  style="width:100px;" placeholder="结束节点">结束节点
+                    <option value="create" >创建订单</option>
+                    <option value="clue">提交信审</option>
+                </select>
+
+            </td>
+        </tr>
+    </table> 
+
+    <label class="strong">不需要创建订单，直接提交信审资料，请只输入订单号和token</label>
+    <input type="text"  style="width:200px;" name="orderNo" placeholder="如已有订单号请输入,用于提交信审"/>
+    <label class="danger">仅限回租提交终审输入</label>
+    <input type="text"  style="width:200px;" name="ishz" placeholder="如已有订单号请输入,回租提交终审资料"/>
+
+
+
+<button type="submit" class="btn btn-success btn-lg">点击创建订单</button>
+<!-- <input type="submit" value="点击创建订单"  onclick="submit"  > -->
+
+
+    <br></br>
+
+
+</form>
+</body>
+
+</html>
