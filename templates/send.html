@@ -11,14 +11,21 @@
 
 </head>
 <body>
-<form action="/send/" method="get" >
-
-<button type="submit" class="btn btn-success btn-lg">点击发送优惠券</button>
-<!-- <input type="submit" value="点击创建订单"  onclick="submit"  > -->
-
-
-
+<div style="text-align:center">
+<form action="/sendbonus/" method="post" class="btn btn waves-effect waves-light" >
+<button type="submit" class="btn btn-success btn-lg">点击发送bonus</button>
 </form>
+
+<br>
+    <br>
+<form action="/sendcoupon/" method="post" >
+<button type="submit" class="btn btn-success btn-lg">点击发送coupon</button>
+</form>
+<br>
+<form action="/serchoffer/" method="post" >
+<button type="submit" class="btn btn-success btn-lg">点击审核优惠券</button>
+</form>
+    </div>
 </body>
 
 </html>

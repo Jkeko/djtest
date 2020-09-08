@@ -17,8 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from webui import views
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url('admin/', admin.site.urls),
     url('hello/', views.hello),
-    url('send/', views.send_bonus),
-    url('send_htm/', views.send_html),
+    url('sendbonus/', views.send_bonus),
+    url('index/', views.send_html),
+    url('serchoffer/', views.serch_offer),
+    url('sendcoupon/', views.send_coupon),
+
+
 ]

@@ -1,9 +1,7 @@
-# -*- coding=utf-8 -*-
+# coding=utf-8
 import traceback
-
 import requests, json
 from time import sleep
-# from lxml import etree
 import configparser
 from view_model.driver import Driver
 import jsonpath
@@ -12,6 +10,9 @@ class Promo():
         global cookies
         self.dr = Driver().driver()
         self.config = configparser.ConfigParser()
+        #Django调用文件 必须存储在django目录下
+        # self.config.read('djtest/config.ini', encoding='utf-8')
+        #脚本调用文件，可以在脚本目录下
         self.config.read('./config.ini',encoding='utf-8')
         self.dr.get("http://wallet-promo.jd.co.th:8080/#")
         self.dr.find_element_by_id("username").send_keys("bjadmin")
@@ -23,77 +24,95 @@ class Promo():
         # 获取cookie中的name和value,转化成requests可以使用的形式
         for cookie in c:
             cookies[cookie['name']] = cookie['value']
-        print(u'cookies--', cookies)
-
-#yanzheng
+        self.dr.close()
     def send_bonus(self):
         try:
             send_bonus_headers = eval(self.config.get('send_bonus','headers'))
             send_bonus_url = self.config.get('send_bonus','send_bonus_url')
             bonus_data = eval(self.config.get('send_bonus','bonus_data'))
-            response=requests.post(url=send_bonus_url,data=json.dumps(bonus_data),headers=send_bonus_headers,cookies=cookies)
+            response = requests.post(url=send_bonus_url, data=json.dumps(bonus_data), headers=send_bonus_headers, cookies=cookies)
             data = response.json()
             value = jsonpath.jsonpath(data,'$.response')
-            if value[0] =='true':
-
-                print('发送券 successful,data--'.decode('gb2312'),response.text)
-                return response.json()
+            if value[0] ==True:
+                return 'send bonus is success,the response is:-->'+response.text
             else:
-                print('发送券 is fail,data--'.decode('gb2312'), response.text)
-                return response.json()
+                return 'send bonus is failed,the error is:-->'+response.text
         except Exception as e:
             print(e)
-            print('traceback.format_exc():\n%s' % traceback.format_exc())
-            self.dr.close()
+        sleep(1)
     def send_coupon(self):
-        global cookies
         try:
-            send_coupon_headers = self.config.get('send_coupon', 'send_coupon_headers')
+            send_coupon_headers = eval(self.config.get('send_coupon', 'send_coupon_headers'))
             send_coupon_url = self.config.get('send_coupon', 'send_coupon_url')
             send_coupon_data = eval(self.config.get('send_coupon', 'send_coupon_data'))
-            send_coupon = requests.post(url=send_coupon_url, headers=eval(send_coupon_headers),data=json.dumps(send_coupon_data),cookies=cookies)
-            data = send_coupon.json()
-            print(data)
+            response = requests.post(url=send_coupon_url, data=json.dumps(send_coupon_data), headers=send_coupon_headers, cookies=cookies)
+            data = response.json()
+            value = jsonpath.jsonpath(data,'$.response')
+            if value[0] ==True:
+                return 'send coupon is success,the response is:-->'+response.text
+            else:
+                return 'send coupon is failed,the error is:-->'+response.text
         except Exception as e:
             print(e)
-            print('traceback.format_exc():\n%s' % traceback.format_exc())
+        sleep(1)
     def serch_bonus(self):
         global cookies
-        # offerid = []
-        serch_bonus_headers = self.config.get('serch_bonus','serch_bonus_headers')
-        serch_bonus_url = self.config.get('serch_bonus','serch_bonus_url')
-        try:
-            serch = requests.get(url=serch_bonus_url, headers=eval(serch_bonus_headers), cookies=cookies)
-            data = serch.json()
-            offerid = []
-            print('data',data['rows'])
-            for key, value in data['rows'].items():  # 迭代当前的字典层级
-                print('value',type(data['rows']))
+        serch_bonus_headers = eval(self.config.get('serch_bonus','serch_bonus_headers'))
+        print('serch_bonus_headers',serch_bonus_headers)
 
-                #
-                # for i in range(0, len(list(value))):
-                #     if value[i]['approvalStatus'] == 1:
-                #         data = value[i]['offerId']
-                #         offerid.append(data)
-                #         offerid1 = offerid[0]
-                #         offer_bonus_headers = self.config.get('offer_bonus', 'offer_bonus_headers')
-                #         url = self.config.get('offer_bonus', 'offer_bonus_url')
-                #         offer_bonus_url = url + offerid1
-                #         print(offer_bonus_url)
-                #         offer = requests.get(url=offer_bonus_url, headers=eval(offer_bonus_headers), cookies=cookies)
-                #         print(offer.text)
-                #     else:
-                #         print('没有需要offer的券')
-                #         break
+        serch_bonus_url = self.config.get('serch_bonus','serch_bonus_url')
+        print('serch_bonus_url', serch_bonus_url)
+        try:
+            serch = requests.get(url=serch_bonus_url, headers=serch_bonus_headers, cookies=cookies)
+            data = serch.json()
+            print(type(data))
+            print('data[rows]',type(data['rows']))
+            serdata = data['rows']
+            offerid = []
+            print('data',serdata)
+            # for key, value in data['rows'].items():  # 迭代当前的字典层级
+            #     print('value',type(data['rows']))
+            #     print('value', data['rows'])
+            #     for i in range(0, data['rows']):
+            #         if value[i]['approvalStatus'] == 1:
+            #             data = value[i]['offerId']
+            #             offerid.append(data)
+            #             offerid1 = offerid[0]
+            #             offer_bonus_headers = self.config.get('offer_bonus', 'offer_bonus_headers')
+            #             url = self.config.get('offer_bonus', 'offer_bonus_url')
+            #             offer_bonus_url = url + offerid1
+            #             print(offer_bonus_url)
+            #             offer = requests.get(url=offer_bonus_url, headers=eval(offer_bonus_headers), cookies=cookies)
+            #             return '执行结果--》'+offer.text
+            #         else:
+            #             print('没有需要offer的券')
+            #             break
+
+            for i in range(0, len(serdata)):
+                print('serdata[i]',serdata[i])
+                if serdata[i]['approvalStatus'] == 1:
+                    offdata = serdata[i]['offerId']
+                    offerid.append(offdata)
+                    offerid1 = offerid[0]
+                    offer_bonus_headers = self.config.get('offer_bonus', 'offer_bonus_headers')
+                    url = self.config.get('offer_bonus', 'offer_bonus_url')
+                    offer_bonus_url = url + offerid1
+                    print(offer_bonus_url)
+                    offer = requests.get(url=str(offer_bonus_url), headers=eval(offer_bonus_headers), cookies=cookies)
+                    print(offer.text)
+                    return '执行结果--》'+offer.text
+                else:
+                    print('没有需要offer的券')
+
+
         except Exception as e:
             print(e)
-            print('traceback.format_exc():\n%s' % traceback.format_exc())
-        self.dr.close()
+            # print('traceback.format_exc():\n%s' % traceback.format_exc())
 
 if __name__ == '__main__':
     p = Promo()
-    p.send_coupon()
-    p.send_bonus()
-    # p.serch_bonus()
+    # p.send_coupon()
+    # p.send_bonus()
+    p.serch_bonus()
 
 
