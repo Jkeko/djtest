@@ -4,6 +4,8 @@ import json
 from django.http import HttpResponse , JsonResponse,HttpResponseRedirect
 from django.shortcuts import render
 from view_model.jd_promo_unittest import Promo
+def index(request):
+    return render(request, 'send.html')
 def hello(request):
     return HttpResponse("Hello world ! From test_mgmt App ")
 def send_html(request):
