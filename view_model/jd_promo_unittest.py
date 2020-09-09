@@ -11,9 +11,9 @@ class Promo():
         self.dr = Driver().driver()
         self.config = configparser.ConfigParser()
         #Django调用文件 必须存储在django目录下
-        # self.config.read('djtest/config.ini', encoding='utf-8')
+        self.config.read('djtest/config.ini', encoding='utf-8')
         #脚本调用文件，可以在脚本目录下
-        self.config.read('./config.ini',encoding='utf-8')
+        # self.config.read('./config.ini',encoding='utf-8')
         self.dr.get("http://wallet-promo.jd.co.th:8080/#")
         self.dr.find_element_by_id("username").send_keys("bjadmin")
         self.dr.find_element_by_id("password").send_keys("xinxibu456")
@@ -25,6 +25,7 @@ class Promo():
         for cookie in c:
             cookies[cookie['name']] = cookie['value']
         self.dr.close()
+    @property
     def send_bonus(self):
         try:
             send_bonus_headers = eval(self.config.get('send_bonus','headers'))
@@ -40,6 +41,8 @@ class Promo():
         except Exception as e:
             print(e)
         sleep(1)
+
+    @property
     def send_coupon(self):
         try:
             send_coupon_headers = eval(self.config.get('send_coupon', 'send_coupon_headers'))
@@ -49,9 +52,11 @@ class Promo():
             data = response.json()
             value = jsonpath.jsonpath(data,'$.response')
             if value[0] ==True:
-                return 'send coupon is success,the response is:-->'+response.text
+                print('send coupon is success,the response is:-->'+response.text)
+                return 'send coupon is success,the response is:-->'+json.dumps(response.text)
             else:
-                return 'send coupon is failed,the error is:-->'+response.text
+                print('send coupon is failed,the error is:-->'+response.text)
+                return 'send coupon is failed,the error is:-->'+json.dumps(response.text)
         except Exception as e:
             print(e)
         sleep(1)
@@ -111,8 +116,8 @@ class Promo():
 
 if __name__ == '__main__':
     p = Promo()
-    # p.send_coupon()
+    p.send_coupon
     # p.send_bonus()
-    p.serch_bonus()
+    # p.serch_bonus()
 
 

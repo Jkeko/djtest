@@ -11,16 +11,16 @@ def hello(request):
 def send_html(request):
     return render(request,'send.html')
 def send_bonus(request):
-    ld = Promo().send_bonus()
-    print(ld)
-    # return HttpResponse(content_type='application/json', content=json.dumps({'返回值': ld}))
-    return HttpResponse(ld)
+    ld = Promo().send_bonus
+    return HttpResponse(content_type='application/json;charset=UTF-8', content=json.dumps({'返回值': ld}))
 
 def send_coupon(request):
-    ld = Promo().send_coupon()
-    print(ld)
+    phone = request.GET.get('phone')
+    ld = Promo().send_coupon
+    # print(ld)
+    # return HttpResponse(ld)
     # return HttpResponse(content_type='application/json', content=json.dumps({'返回值': ld}))
-    return HttpResponse(ld)
+    return render(request, 'ok.html',{'username': phone,'username2':ld})
 
 
 
